@@ -3,67 +3,68 @@ function getTimeStamp() {
     return now.toLocaleTimeString() + " - " + now.toLocaleDateString();
 }
 
-// Funktion zum Protokollieren
+// Logging function
 function logMessage(message) {
     const timeStampedMessage = `<p>${getTimeStamp()}: ${message}</p>`;
     document.body.innerHTML += timeStampedMessage;
     console.log(getTimeStamp() + ": " + message);
 }
 
-// Tab-Switching Events
+// Tab-switching events
 window.onblur = function() {
-    logMessage("Tab gewechselt oder Fenster verlassen");
+    logMessage("Tab switched or window left");
 };
 
 window.onfocus = function() {
-    logMessage("Zurück im Tab");
+    logMessage("Returned to the tab");
 };
 
-// Anfrage für Kamera und Mikrofon
+// Request for camera and microphone access
 async function requestCameraAndMicrophone() {
     try {
         await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        logMessage("Kamera- und Mikrofonzugriff erfolgreich gewährt");
+        logMessage("Camera and microphone access granted successfully");
     } catch (error) {
-        logMessage("Kamera- und Mikrofonzugriff verweigert oder fehlgeschlagen");
+        logMessage("Camera and microphone access denied or failed");
     }
 }
 
-// Anfrage für Benachrichtigungen
+// Request for notifications permission
 function requestNotificationPermission() {
     if ("Notification" in window) {
         Notification.requestPermission().then(permission => {
-            logMessage(`Benachrichtigungen-Berechtigung: ${permission}`);
+            logMessage(`Notifications permission: ${permission}`);
         });
     } else {
-        logMessage("Benachrichtigungen nicht unterstützt");
+        logMessage("Notifications not supported");
     }
 }
 
-// Überprüfung des Vollbildmodus
+// Check fullscreen mode status
 function checkFullScreenStatus() {
     if (document.fullscreenElement) {
-        logMessage("Browser ist im Vollbildmodus");
+        logMessage("Browser is in fullscreen mode");
     } else {
-        logMessage("Browser hat den Vollbildmodus verlassen");
+        logMessage("Browser exited fullscreen mode");
     }
 }
 
-// Ereignislistener für den Wechsel des Vollbildmodus
+// Event listener for fullscreen mode changes
 document.addEventListener("fullscreenchange", checkFullScreenStatus);
 
-// Initiale Anfragen stellen
+// Initial requests
 requestCameraAndMicrophone();
 requestNotificationPermission();
 checkFullScreenStatus();
 
-// Optional: Automatisches Testen des Vollbildmodus nach einer kurzen Verzögerung
+// Optional: Automatically test fullscreen mode after a short delay
 setTimeout(() => {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().then(() => {
-            logMessage("Vollbildmodus manuell aktiviert");
+            logMessage("Fullscreen mode manually activated");
         }).catch((err) => {
-            logMessage("Vollbildmodus konnte nicht aktiviert werden");
+            logMessage("Fullscreen mode could not be activated");
         });
     }
 }, 2000);
+
